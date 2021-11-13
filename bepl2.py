@@ -49,79 +49,96 @@ class Bepl():
         if self.ground.direction:
             k = 0.00
             r = []
-            while k < self.ground.length:
-
-                if self.startval > 0:
-                    #print("startval", self.startval)
+            length = self.ground.length
+        else:
+            k = 0.00
+            r = []
+            length = self.ground.width
+            
+        while k < length:
+            
+            if self.startval > 0:
+                #print("startval", self.startval)
+                if self.lrow:
+                    r.append(Board(length=self.startval,
+                                   pos=1,
+                                   width=self.lastrow,
+                                   thick=self.full_board.thick
+                                   ))
+                    
+                else:
+                    r.append(Board(length=self.startval,
+                                    pos=1,
+                                    width=self.full_board.width,
+                                    thick=self.full_board.thick
+                                    ))
+                k = k + self.startval
+                self.startval = 0.00
+                continue
+            else:
+                if length - k > self.full_board.length:
+                    #print("Addboard")
                     if self.lrow:
-                        r.append(Board(length=self.startval,
-                                       pos=1,
+                        r.append(Board(pos=0,
+                                       length=self.full_board.length,
                                        width=self.lastrow,
                                        thick=self.full_board.thick
-                                       ))
+                                        ))
+                        k = k + self.full_board.length
+                    
                     else:
-                        r.append(Board(length=self.startval,
-                                       pos=1,
-                                       width=self.full_board.width,
-                                       thick=self.full_board.thick
-                                       ))
-                    k = k + self.startval
-                    self.startval = 0.00
+                        r.append(self.full_board)
+                        k = k + self.full_board.length
+                        continue
+                    
+                        
                 else:
-                    if self.ground.length - k > self.full_board.length:
-                        #print("Addboard")
-                        if self.lrow:
-                            r.append(Board(pos=0,
-                                           length=self.full_board.length,
-                                           width=self.lastrow,
-                                           thick=self.full_board.thick
-                                           ))
-                            k = k + self.full_board.length
-                        else:
-                            r.append(self.full_board)
-                            k = k + self.full_board.length
-
+                    rst = length - k
+                    if self.lrow:
+                        r.append(Board(length=rst,
+                                        pos=1,
+                                        width=self.lastrow,
+                                        thick=self.full_board.thick
+                                        ))
+                        
                     else:
-                        rst = self.ground.length - k
                         if self.lrow:
                             r.append(Board(length=rst,
-                                           pos=1,
-                                           width=self.lastrow,
-                                           thick=self.full_board.thick
-                                           ))
+                                            pos=1,
+                                            width=self.full_board.width,
+                                            thick=self.full_board.thick
+                                            ))
+                            
                         else:
-                            if self.lrow:
-                                r.append(Board(length=rst,
-                                               pos=1,
-                                               width=self.full_board.width,
-                                               thick=self.full_board.thick
-                                               ))
-                            else:
-                                r.append(Board(length=rst,
-                                               pos=1,
-                                               width=self.full_board.width,
-                                               thick=self.full_board.thick
-                                               ))
+                            r.append(Board(length=rst,
+                                            pos=1,
+                                            width=self.full_board.width,
+                                            thick=self.full_board.thick
+                                            ))
+                            
 
-                        self.startval = self.full_board.length -rst
-                        k = k + rst
-                        break
+                    self.startval = self.full_board.length -rst
+                    k = k + rst
+                    
+                    
             return r
 
     def Rows(self):
-        if self.ground.direction:
-            for i in range(self.rowcount):
-                if i == self.rowcount-1:
-                    self.lrow = True
-                row = self.FillRow()
-                print("row", i)
-                print(row)
+        
+        for i in range(self.rowcount):
+            if i == self.rowcount-1:
+                self.lrow = True
+            row = self.FillRow()
+            print("row", i)
+            print(row)
 
 
 def Main():
-    g = Ground(length=2.00, width=2.40, direction=True)
+    g = Ground(length=6.20, width=2.40, direction=False)
     b = Board(pos=0, length=2.50, width=0.675, thick=0.015)
     c = Bepl(g, b)
+
+
 
 
 
